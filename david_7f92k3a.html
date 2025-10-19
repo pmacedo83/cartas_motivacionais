@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta para David</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #fef9ff, #e0f7fa);
+    }
+    .letter {
+      max-width: 700px;
+    }
+    .typing {
+      border-right: 2px solid #6366f1;
+      animation: blink 0.7s step-end infinite;
+    }
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #6366f1; }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-8">
+  <div class="letter bg-white rounded-2xl shadow-xl p-8 space-y-6 animate-fadeIn">
+    <h1 class="text-3xl font-bold text-indigo-600 text-center">💫 Carta para David</h1>
+    <div id="carta" class="text-gray-800 text-lg leading-relaxed whitespace-pre-line"></div>
+    <p class="text-right font-semibold mt-6">Com estima e consideração,<br>Professor Pedro Macedo</p>
+  </div>
+
+  <script>
+    const textoCarta = `
+Meu Amigo David, a quem eu tive o privilégio de ter como aluno e companheiro, quem sempre topou participar das minhas loucuras e projetos.
+
+Chegou o momento de encerrar mais um ciclo — as provas finais estão aí, representando o último degrau de uma jornada que exigiu esforço, paciência e determinação. Mas quero que você saiba: elas não definem quem você é. São apenas uma etapa, um desafio que confirma o quanto você cresceu, amadureceu e aprendeu ao longo do caminho.
+
+Acredite, David: cada dia, cada aula, cada dúvida superada e cada tentativa de fazer melhor faz parte de um processo que te tornou mais forte. As provas são só o fechamento de um capítulo — e você está mais do que preparado para virar a página e seguir para o próximo.
+
+Confie em si mesmo. Continue sendo esse jovem dedicado, esforçado e corajoso para enfrentar qualquer obstáculo. Eu acredito profundamente no seu potencial e sei que o futuro reserva grandes conquistas para você.
+
+Boa sorte nas provas e, principalmente, boa sorte na vida que te espera lá fora — ela está pronta para receber tudo o que você tem a oferecer. Forte abraço, Deus lhe abençoe!
+    `;
+
+    const cartaDiv = document.getElementById('carta');
+    let i = 0;
+
+    function digitar() {
+      if (i < textoCarta.length) {
+        cartaDiv.innerHTML += textoCarta.charAt(i) === '\n' ? '<br>' : textoCarta.charAt(i);
+        i++;
+        setTimeout(digitar, 20);
+      } else {
+        cartaDiv.classList.remove('typing');
+      }
+    }
+
+    cartaDiv.classList.add('typing');
+    digitar();
+  </script>
+</body>
+</html>
