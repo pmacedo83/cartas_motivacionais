@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta para João Vytor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      font-family: 'Georgia', serif;
+    }
+    .letter-container {
+      max-width: 700px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .letter-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, #1e40af, #3b82f6);
+    }
+    .typing {
+      border-right: 2px solid #3b82f6;
+      animation: blink 0.7s step-end infinite;
+    }
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #3b82f6; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-out;
+    }
+    .signature {
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+    .visible {
+      opacity: 1;
+    }
+    
+    /* Estilo para a fonte Allura */
+    .handwriting {
+      font-family: 'Allura', cursive;
+      font-size: 1.6rem;
+      line-height: 1.6;
+    }
+    
+    .handwriting-signature {
+      font-family: 'Allura', cursive;
+      font-size: 1.9rem;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+  <div class="letter-container bg-white rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
+    <div class="text-center mb-4">
+      <h1 class="text-2xl md:text-3xl font-bold text-blue-800">Caro João Vytor</h1>
+    </div>
+
+    <!-- Carta -->
+    <div id="carta" class="handwriting text-gray-800 leading-relaxed whitespace-pre-line mt-6 min-h-[300px] p-4"></div>
+
+    <!-- Assinatura (inicialmente oculta) -->
+    <div id="assinatura" class="signature text-right mt-8 pt-4 border-t border-gray-300">
+      <p class="font-semibold text-gray-700">Com estima e consideração,</p>
+      <p class="handwriting-signature text-blue-800 mt-2">Professor Pedro Macedo</p>
+    </div>
+  </div>
+
+  <script>
+    const textoCarta = `João Vytor,
+
+As provas finais estão chegando e, com elas, o encerramento de mais uma importante etapa da sua caminhada. Elas simbolizam o último degrau antes de um novo começo, e eu quero que você as encare com serenidade e confiança. Você trilhou um caminho cheio de aprendizado, crescimento e superação — e isso já é motivo de orgulho.
+
+Lembre-se: o valor de um estudante não se mede por uma nota, mas pela dedicação e pela vontade de continuar tentando. E isso, João, você tem de sobra. Você é capaz, inteligente e determinado, e sei que vai dar o seu melhor em cada questão, como sempre fez.
+
+Boa sorte nas provas — e mais ainda na vida! Que cada sonho seu encontre o caminho certo para se tornar realidade.`;
+
+    const cartaDiv = document.getElementById('carta');
+    const assinaturaDiv = document.getElementById('assinatura');
+
+    let i = 0;
+    let isPlaying = false;
+    let typingInterval;
+    const typingSpeed = 40; // ms por caractere
+    let currentText = '';
+
+    // Inicializar a carta vazia
+    cartaDiv.innerHTML = '';
+    cartaDiv.classList.add('typing');
+
+    function typeWriter() {
+      if (i < textoCarta.length && isPlaying) {
+        const char = textoCarta.charAt(i);
+        currentText += char === '\n' ? '<br>' : char;
+        cartaDiv.innerHTML = currentText;
+        
+        i++;
+        typingInterval = setTimeout(typeWriter, typingSpeed);
+      } else if (i >= textoCarta.length) {
+        // Finalizou a digitação
+        cartaDiv.classList.remove('typing');
+        isPlaying = false;
+        
+        // Mostrar a assinatura
+        setTimeout(() => {
+          assinaturaDiv.classList.add('visible');
+        }, 500);
+      }
+    }
+
+    function startTyping() {
+      if (i >= textoCarta.length) {
+        // Se já terminou, reiniciar
+        restartTyping();
+      }
+      
+      isPlaying = true;
+      typeWriter();
+    }
+
+    function restartTyping() {
+      isPlaying = false;
+      clearTimeout(typingInterval);
+      i = 0;
+      currentText = '';
+      cartaDiv.innerHTML = '';
+      cartaDiv.classList.add('typing');
+      assinaturaDiv.classList.remove('visible');
+    }
+
+    // Iniciar automaticamente após um breve delay
+    setTimeout(() => {
+      startTyping();
+    }, 1000);
+  </script>
+</body>
+</html>
