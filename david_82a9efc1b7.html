@@ -3,61 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>David</title>
+  <title>Carta para David</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(to right, #fef9ff, #e0f7fa);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      font-family: 'Georgia', serif;
     }
-    .letter {
+    .letter-container {
       max-width: 700px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .letter-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, #1e40af, #3b82f6);
     }
     .typing {
-      border-right: 2px solid #6366f1;
+      border-right: 2px solid #3b82f6;
       animation: blink 0.7s step-end infinite;
     }
     @keyframes blink {
       from, to { border-color: transparent }
-      50% { border-color: #6366f1; }
+      50% { border-color: #3b82f6; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-out;
+    }
+    .signature {
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+    .visible {
+      opacity: 1;
+    }
+    .handwriting {
+      font-family: 'Allura', cursive;
+      font-size: 1.6rem;
+      line-height: 1.6;
+    }
+    .handwriting-signature {
+      font-family: 'Allura', cursive;
+      font-size: 1.9rem;
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-8">
-  <div class="letter bg-white rounded-2xl shadow-xl p-8 space-y-6 animate-fadeIn">
-    <h1 class="text-3xl font-bold text-indigo-600 text-center">✉️ David Kends "Lindão" Camargo.</h1>
-    <div id="carta" class="text-gray-800 text-lg leading-relaxed whitespace-pre-line"></div>
-    <p class="text-right font-semibold mt-6">Com estima e consideração,<br>Professor Pedro Macedo</p>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+  <div class="letter-container bg-white rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
+    <div class="text-center mb-4">
+      <h1 class="text-2xl md:text-3xl font-bold text-blue-800">David "Lindão" Kends</h1>
+    </div>
+
+    <div id="carta" class="handwriting text-gray-800 leading-relaxed whitespace-pre-line mt-6 min-h-[300px] p-4"></div>
+
+    <div id="assinatura" class="signature text-right mt-8 pt-4 border-t border-gray-300">
+      <p class="font-semibold text-gray-700">Um forte abraço,</p>
+      <p class="handwriting-signature text-blue-800 mt-2">Professor Pedro Macedo</p>
+    </div>
   </div>
 
   <script>
-    const textoCarta = `
-Meu Amigo David, a quem eu tive o privilégio de ter como aluno e companheiro, quem sempre topou participar das minhas loucuras e projetos.
+    const textoCarta = `Meu amigo David, a quem sempre ajudou em meus projetos acadêmicos, sentirei falta das nossas conversas!
 
-Chegou o momento de encerrar mais um ciclo — as provas finais estão aí, representando o último degrau de uma jornada que exigiu esforço, paciência e determinação. Mas quero que você saiba: elas não definem quem você é. São apenas uma etapa, um desafio que confirma o quanto você cresceu, amadureceu e aprendeu ao longo do caminho.
+Chegou o momento de encerrar mais um ciclo — as provas finais estão aí, representando o último degrau de uma jornada que exigiu esforço, paciência e determinação. Mas quero que você saiba que elas não definem quem você é. Elas são apenas uma etapa, um desafio que confirma o quanto você cresceu, amadureceu e aprendeu ao longo do caminho.
 
-Acredite, David: cada dia, cada aula, cada dúvida superada e cada tentativa de fazer melhor faz parte de um processo que te tornou mais forte. As provas são só o fechamento de um capítulo — e você está mais do que preparado para virar a página e seguir para o próximo.
+Acredite, David: cada noite de estudo, cada dúvida superada e cada tentativa de fazer melhor foi parte de um processo que te tornou mais forte. As provas são só o fechamento de um capítulo — e você está mais do que preparado para virar a página e seguir para o próximo.
 
-Confie em si mesmo. Continue sendo esse jovem dedicado, esforçado e corajoso para enfrentar qualquer obstáculo. Eu acredito profundamente no seu potencial e sei que o futuro reserva grandes conquistas para você.
+Confie em si mesmo. Continue sendo esse jovem dedicado, com vontade de aprender e coragem para enfrentar qualquer obstáculo. Eu acredito profundamente no seu potencial e sei que o futuro reserva grandes conquistas para você.
 
-Boa sorte nas provas e, principalmente, boa sorte na vida que te espera lá fora — ela está pronta para receber tudo o que você tem a oferecer. Forte abraço, Deus lhe abençoe!
-    `;
+Boa sorte nas provas e, principalmente, boa sorte na vida que te espera lá fora — ela está pronta para receber tudo o que você tem a oferecer! Deus lhe abençoe sempre.`;
 
     const cartaDiv = document.getElementById('carta');
-    let i = 0;
+    const assinaturaDiv = document.getElementById('assinatura');
 
-    function digitar() {
-      if (i < textoCarta.length) {
-        cartaDiv.innerHTML += textoCarta.charAt(i) === '\n' ? '<br>' : textoCarta.charAt(i);
+    let i = 0;
+    let isPlaying = false;
+    let typingInterval;
+    const typingSpeed = 40;
+    let currentText = '';
+
+    cartaDiv.innerHTML = '';
+    cartaDiv.classList.add('typing');
+
+    function typeWriter() {
+      if (i < textoCarta.length && isPlaying) {
+        const char = textoCarta.charAt(i);
+        currentText += char === '\n' ? '<br>' : char;
+        cartaDiv.innerHTML = currentText;
         i++;
-        setTimeout(digitar, 20);
-      } else {
+        typingInterval = setTimeout(typeWriter, typingSpeed);
+      } else if (i >= textoCarta.length) {
         cartaDiv.classList.remove('typing');
+        isPlaying = false;
+        setTimeout(() => { assinaturaDiv.classList.add('visible'); }, 500);
       }
     }
 
-    cartaDiv.classList.add('typing');
-    digitar();
+    function startTyping() {
+      if (i >= textoCarta.length) restartTyping();
+      isPlaying = true;
+      typeWriter();
+    }
+
+    function restartTyping() {
+      isPlaying = false;
+      clearTimeout(typingInterval);
+      i = 0;
+      currentText = '';
+      cartaDiv.innerHTML = '';
+      cartaDiv.classList.add('typing');
+      assinaturaDiv.classList.remove('visible');
+    }
+
+    setTimeout(() => { startTyping(); }, 1000);
   </script>
 </body>
 </html>
-
