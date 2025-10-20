@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta para Bianca</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-family: 'Georgia', serif; }
+    .letter-container { --accent-dark: #be185d; --accent: #ec4899; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+    .letter-container::before { content: ""; position: absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(to right, var(--accent-dark), var(--accent)); }
+    .typing { border-right: 2px solid var(--accent); animation: blink 0.7s step-end infinite; }
+    @keyframes blink { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
+    .animate-fadeIn { animation: fadeIn 1s ease-out; }
+    .signature { opacity: 0; transition: opacity 0.5s ease-in; } .visible { opacity: 1; }
+    .handwriting { font-family: 'Allura', cursive; font-size:1.6rem; line-height:1.6; }
+    .handwriting-signature { font-family: 'Allura', cursive; font-size:1.9rem; color: var(--accent); }
+    .letter-container h1 { color: var(--accent); }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+  <div class="letter-container bg-white rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
+    <div class="text-center mb-4"><h1 class="text-2xl md:text-3xl font-bold text-blue-800">Oi Bia!</h1></div>
+    <div id="carta" class="handwriting text-gray-800 leading-relaxed whitespace-pre-line mt-6 min-h-[300px] p-4"></div>
+    <div id="assinatura" class="signature text-right mt-8 pt-4 border-t border-gray-300"><p class="font-semibold text-gray-700">Com estima e consideração,</p><p class="handwriting-signature text-blue-800 mt-2">Professor Pedro Macedo</p></div>
+  </div>
+
+  <script>
+  const textoCarta = `Bianca,
+
+Estamos chegando ao fim de mais um ciclo e eu quero que você saiba o quanto admiro a sua dedicação. Nem sempre os caminhos são fáceis, mas você mostrou força e persistência — e isso é o que realmente importa.
+
+Lembre-se: as provas são uma etapa. O que permanece são sua coragem, seu caráter e a vontade de seguir em frente. Confie no seu preparo e na sua capacidade de superar desafios.
+
+Desejo que você encare essa fase com serenidade e orgulho do quanto já conquistou. Boa sorte nas provas e em tudo que ainda virá.`;
+
+    const cartaDiv = document.getElementById('carta');
+    const assinaturaDiv = document.getElementById('assinatura');
+    let i = 0; let isPlaying = false; let typingInterval; const typingSpeed = 40; let currentText = '';
+    cartaDiv.innerHTML = ''; cartaDiv.classList.add('typing');
+    function typeWriter() { if (i < textoCarta.length && isPlaying) { const char = textoCarta.charAt(i); currentText += char === '\n' ? '<br>' : char; cartaDiv.innerHTML = currentText; i++; typingInterval = setTimeout(typeWriter, typingSpeed); } else if (i >= textoCarta.length) { cartaDiv.classList.remove('typing'); isPlaying = false; setTimeout(() => { assinaturaDiv.classList.add('visible'); }, 500); } }
+    function startTyping() { if (i >= textoCarta.length) restartTyping(); isPlaying = true; typeWriter(); }
+    function restartTyping() { isPlaying = false; clearTimeout(typingInterval); i = 0; currentText = ''; cartaDiv.innerHTML = ''; cartaDiv.classList.add('typing'); assinaturaDiv.classList.remove('visible'); }
+    setTimeout(() => { startTyping(); }, 1000);
+  </script>
+</body>
+</html>
