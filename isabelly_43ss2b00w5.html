@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta para Isabelly</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-family: 'Georgia', serif; }
+    .letter-container { --accent-dark: #c026d3; --accent: #f472b6; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+    .letter-container::before { content: ""; position: absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(to right, var(--accent-dark), var(--accent)); }
+    .typing { border-right: 2px solid var(--accent); animation: blink 0.7s step-end infinite; }
+    @keyframes blink { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
+    .animate-fadeIn { animation: fadeIn 1s ease-out; }
+    .signature { opacity: 0; transition: opacity 0.5s ease-in; } .visible { opacity: 1; }
+    .handwriting { font-family: 'Allura', cursive; font-size:1.6rem; line-height:1.6; }
+    .handwriting-signature { font-family: 'Allura', cursive; font-size:1.9rem; color: var(--accent); }
+    .letter-container h1 { color: var(--accent); }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+  <div class="letter-container bg-white rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
+    <div class="text-center mb-4"><h1 class="text-2xl md:text-3xl font-bold text-blue-800">Minha querida "Lerdinha"!"</h1></div>
+    <div id="carta" class="handwriting text-gray-800 leading-relaxed whitespace-pre-line mt-6 min-h-[300px] p-4"></div>
+    <div id="assinatura" class="signature text-right mt-8 pt-4 border-t border-gray-300"><p class="font-semibold text-gray-700">Com estima e consideração,</p><p class="handwriting-signature text-blue-800 mt-2">Professor Pedro Macedo</p></div>
+  </div>
+
+  <script>
+  const textoCarta = `Oi Isa, Belinha, Lerdinha ou qualquer outro apelido carinhoso que você prefira!,
+
+Escrevo esta carta porque, neste final de ciclo, quero te lembrar de algo fundamental: o quanto o seu jeito faz diferença, e o quanto o mundo precisa de mais pessoas como você.
+
+Você tem uma presença que, quase sem esforço, transmite uma paz e uma leveza incríveis. É como se a calma a acompanhasse. Sua simplicidade e doçura têm o poder genuíno de transformar qualquer ambiente, tornando o nosso dia a dia mais agradável e fazendo com que todos ao seu redor se sintam imediatamente bem, acolhidos e seguros. Essa capacidade de suavizar os espaços é um dom que você deve valorizar imensamente.
+
+Nós, muitas vezes, passamos a vida buscando grandes feitos e atitudes grandiosas, mas a verdadeira magia, a que realmente impacta o dia a dia, está justamente no que você faz de forma natural. Quem para para notar um sorriso sincero em um momento de estresse? Quem percebe uma palavra gentil dita no corredor, ou um gesto de atenção que conforta um colega, mas que passa despercebido pelos mais apressados? Você faz tudo isso. Essa autenticidade e bondade despretensiosa são a sua marca, e é isso que te torna uma pessoa tão incrivelmente especial e rara. Essa é a sua força sutil, mas poderosa.
+
+Quero que você leve essa verdade com você: o seu caráter é a sua maior credencial. As matérias mudam, os desafios se transformam, mas a sua essência — essa doçura e lealdade consigo e com os outros — será a bússola mais confiável da sua vida.
+
+Neste momento de encerramento, de provas finais e de incertezas sobre o futuro, lembre-se de que a sua jornada é muito maior e mais valiosa do que um resultado em uma folha de papel. Acredito profundamente no seu potencial. Você tem dentro de si, nessa delicadeza que muitos confundem com fragilidade, toda a garra, a inteligência e a perseverança que precisa para conquistar o que desejar. Nunca duvide da sua capacidade de brilhar.
+
+Continue caminhando com a paciência e a fé que te são tão características, e com a confiança inabalável de que o futuro guarda coisas maravilhosas. O que é construído com essa pureza e dedicação de coração, como é o seu caso, sempre encontra o seu caminho mais bonito, mais digno e mais feliz.
+
+Foi uma honra fazer parte, mesmo que por pouco tempo, da sua história. E mesmo que eu não seja o seu professor preferido, você sempre será a minha aluna preferida!
+
+Com todo o meu carinho, a mais profunda admiração e os melhores votos para a sua vida,`;
+
+    const cartaDiv = document.getElementById('carta');
+    const assinaturaDiv = document.getElementById('assinatura');
+    let i = 0; let isPlaying = false; let typingInterval; const typingSpeed = 40; let currentText = '';
+    cartaDiv.innerHTML = ''; cartaDiv.classList.add('typing');
+    function typeWriter() { if (i < textoCarta.length && isPlaying) { const char = textoCarta.charAt(i); currentText += char === '\n' ? '<br>' : char; cartaDiv.innerHTML = currentText; i++; typingInterval = setTimeout(typeWriter, typingSpeed); } else if (i >= textoCarta.length) { cartaDiv.classList.remove('typing'); isPlaying = false; setTimeout(() => { assinaturaDiv.classList.add('visible'); }, 500); } }
+    function startTyping() { if (i >= textoCarta.length) restartTyping(); isPlaying = true; typeWriter(); }
+    function restartTyping() { isPlaying = false; clearTimeout(typingInterval); i = 0; currentText = ''; cartaDiv.innerHTML = ''; cartaDiv.classList.add('typing'); assinaturaDiv.classList.remove('visible'); }
+    setTimeout(() => { startTyping(); }, 1000);
+  </script>
+</body>
+</html>

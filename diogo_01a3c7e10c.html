@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta para Diogo Leal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-family: 'Georgia', serif; }
+    .letter-container { max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+    .letter-container::before { content: ""; position: absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(to right, #1e40af, #3b82f6); }
+    .typing { border-right: 2px solid #3b82f6; animation: blink 0.7s step-end infinite; }
+    @keyframes blink { from, to { border-color: transparent } 50% { border-color: #3b82f6; } }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
+    .animate-fadeIn { animation: fadeIn 1s ease-out; }
+    .signature { opacity: 0; transition: opacity 0.5s ease-in; } .visible { opacity: 1; }
+    .handwriting { font-family: 'Allura', cursive; font-size:1.6rem; line-height:1.6; }
+    .handwriting-signature { font-family: 'Allura', cursive; font-size:1.9rem; }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+  <div class="letter-container bg-white rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
+    <div class="text-center mb-4">
+      <h1 class="text-2xl md:text-3xl font-bold text-blue-800">Diego, Kinkos, Didi, ou apenas Diogo o "Leal". </h1>
+    </div>
+
+    <div id="carta" class="handwriting text-gray-800 leading-relaxed whitespace-pre-line mt-6 min-h-[300px] p-4"></div>
+
+    <div id="assinatura" class="signature text-right mt-8 pt-4 border-t border-gray-300">
+      <p class="handwriting-signature text-blue-800 mt-2">Professor Pedro Macedo</p>
+    </div>
+  </div>
+
+  <script>
+    const textoCarta = `Meu querido amigo Diogo,
+
+Permita-me começar esta carta de uma forma um pouco mais pessoal, algo que venho pensando há algum tempo. Poucas vezes na minha trajetória de professor um nome combinou tanto com a essência de uma pessoa. “Leal”, de lealdade — e você faz jus a cada letra, Diogo.
+
+Sua postura, sua forma de olhar o mundo e a sinceridade que carrega consigo são um farol. Eu percebo isso na sua conduta discreta, na maneira justa de intervir quando um colega precisa de apoio, e naquele respeito genuíno que você carrega, mesmo em momentos de discordância. É uma qualidade que ultrapassa a sala de aula e toca a alma de quem está por perto.
+
+Ser leal é muito mais do que uma virtude; é uma bússola interna que guia quem você é e quem você será. E é um privilégio para mim ter acompanhado de perto as suas atitudes. Lembro com carinho das nossas conversas mais francas e das confidências que pudemos trocar. Saiba que esses momentos, construídos na base da confiança mútua, serão eternamente guardados por mim como um tesouro que a vida de professor nos dá.
+
+Neste final de ciclo, não quero que você se preocupe apenas com as provas. Quero que você saiba que o seu maior diferencial não está nos conceitos que memorizou, mas sim no caráter que você construiu. O mundo precisa desesperadamente de pessoas que, como você, têm a tranquilidade de quem sabe o valor da palavra dada e agem com integridade.
+
+Acredito profundamente no seu potencial, Diogo. Você tem todas as ferramentas necessárias para não apenas alcançar grandes conquistas, mas para construir um futuro que seja sólido e inspirador para os outros. Continue firme, fiel aos seus princípios. Leve sua lealdade como a sua maior força e o seu maior orgulho.
+
+Com o coração cheio de esperança pelo seu caminho e a certeza de que você fará a diferença,
+
+Com muito respeito e a mais sincera admiração,`;
+
+    const cartaDiv = document.getElementById('carta');
+    const assinaturaDiv = document.getElementById('assinatura');
+    let i = 0;
+    let isPlaying = false;
+    let typingInterval;
+    const typingSpeed = 40;
+    let currentText = '';
+
+    cartaDiv.innerHTML = '';
+    cartaDiv.classList.add('typing');
+
+    function typeWriter() {
+      if (i < textoCarta.length && isPlaying) {
+        const char = textoCarta.charAt(i);
+        currentText += char === '\n' ? '<br>' : char;
+        cartaDiv.innerHTML = currentText;
+        i++;
+        typingInterval = setTimeout(typeWriter, typingSpeed);
+      } else if (i >= textoCarta.length) {
+        cartaDiv.classList.remove('typing');
+        isPlaying = false;
+        setTimeout(() => {
+          assinaturaDiv.classList.add('visible');
+        }, 800);
+      }
+    }
+
+    function startTyping() {
+      if (i >= textoCarta.length) restartTyping();
+      isPlaying = true;
+      typeWriter();
+    }
+
+    function restartTyping() {
+      isPlaying = false;
+      clearTimeout(typingInterval);
+      i = 0;
+      currentText = '';
+      cartaDiv.innerHTML = '';
+      cartaDiv.classList.add('typing');
+      assinaturaDiv.classList.remove('visible');
+    }
+
+    setTimeout(() => { startTyping(); }, 1000);
+  </script>
+</body>
+</html>
