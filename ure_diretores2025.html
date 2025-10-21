@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carta - Marca d'água no fundo</title>
+<title>Encontro de Diretores - URE ITAPEVA - SAEB</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Petit+Formal+Script&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0.20; /* mais forte */
+  opacity: 0.20;
   pointer-events: none;
   max-width: 40%;
   z-index: 0;
@@ -32,7 +32,7 @@ body {
 
 /* Carta container */
 .paper {
-  background-color: rgba(255, 255, 255, 0.37); /* branco */
+  background-color: rgba(255, 255, 255, 0.37);
   border-radius: 6px;
   max-width: 700px;
   width: 90%;
@@ -87,7 +87,7 @@ body {
 .saeb-highlight { 
   font-family: 'Roboto', sans-serif; 
   font-weight: 700; 
-  color: rgb(189, 12, 12 )
+  color: rgb(189, 12, 12)
 }
 
 .quote-highlight { font-weight: bold; color: #2c2a2a; }
@@ -103,7 +103,7 @@ body {
 .assinatura {
   text-align: right;
   margin-top: 2rem;
-  display: none; /* oculto até terminar typing */
+  display: none;
 }
 .assinatura .saudacao {
   font-family: 'Petit Formal Script', cursive;
@@ -127,7 +127,7 @@ body {
 </head>
 <body>
 
-<!-- Marca d'água fixa no fundo -->
+<!-- Marca d'água -->
 <img src="logo-pilar-2.png" alt="Marca d'água" class="page-watermark">
 
 <!-- Loader -->
@@ -156,7 +156,6 @@ body {
 AOS.init({ duration: 1000 });
 
 const textoCarta = `
-
 Neste período de preparação para o {SAEB}, é tempo de reconhecer o trabalho, o empenho e a dedicação de quem conduz, com sabedoria e propósito, o cotidiano da escola. O(a) diretor(a) é aquele que acredita, inspira e transforma, guiando sua equipe com coragem e sensibilidade diante dos desafios.
 
 Sob sua liderança, cada conquista se torna mais significativa e cada obstáculo, uma oportunidade de crescimento. Sua postura firme e confiante, marcada por expressões como {“Seja luz”}, {“Me tragam a solução, não o problema”}, {“Juntos somos mais fortes”}, {“Foco no resultado”}, {“A persistência leva ao sucesso”}, {“A educação é a base do conhecimento. A interpretação é a base da sabedoria”}, {“Você é mais forte do que imagina”}, {“Transformo desafios em pontes e sonhos em planos — é assim que se constrói uma escola viva”} e {“Quando trabalhamos juntos — escola, estudantes e famílias — o resultado é maior”}, revela uma visão de gestão que une compromisso, clareza e amor pela educação.
@@ -170,11 +169,66 @@ Nosso reconhecimento e gratidão a você, que faz da educação uma missão diá
 const cartaDiv = document.getElementById('carta');
 const assinaturaDiv = document.getElementById('assinatura');
 const loader = document.getElementById('loader');
-
 let i = 0;
 let currentText = '';
-const typingSpeed = 35;
+const typingSpeed = 60;
 
+/* 🔊 Som de máquina de escrever realista com pausas aleatórias */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTypingSound() {
+  // 🔸 Gera pausa natural aleatória (às vezes não toca som)
+  if (Math.random() < 0.25) return; // ~25% de chance de "pausa"
+
+  const duration = 0.05;
+  const mainGain = audioCtx.createGain();
+  mainGain.connect(audioCtx.destination);
+
+  // 🔹 Ruído seco da tecla
+  const bufferSize = audioCtx.sampleRate * duration;
+  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
+  }
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuffer;
+
+  // 🔹 Filtro metálico
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 2100 + Math.random() * 200;
+
+  // 🔹 Envoltória de volume
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.20, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+  // 🔹 Click mecânico complementar
+  const osc = audioCtx.createOscillator();
+  osc.type = "sawtooth";
+  osc.frequency.setValueAtTime(2800 + Math.random() * 900, audioCtx.currentTime);
+  const oscGain = audioCtx.createGain();
+  oscGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+  oscGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+
+  // 🔹 Liga os nós
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(mainGain);
+  osc.connect(oscGain);
+  oscGain.connect(mainGain);
+
+  // 🔹 Executa ambos
+  noise.start();
+  osc.start();
+  noise.stop(audioCtx.currentTime + duration);
+  osc.stop(audioCtx.currentTime + 0.05);
+}
+
+
+/* Formatação e digitação */
 function formatText(text){
   text = text.replace(/{SAEB}/g,'<span class="saeb-highlight">SAEB</span>');
   text = text.replace(/{([^}]+)}/g,'<span class="quote-highlight">$1</span>');
@@ -186,16 +240,15 @@ function typeWriter(){
     const char = textoCarta.charAt(i);
     currentText += char === '\n' ? '<br>' : char;
     cartaDiv.innerHTML = formatText(currentText) + '<span class="typing-cursor"></span>';
-    
-    // Scroll automático
-    cartaDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
+    playTypingSound(); // 🔊 toca o som
+
+    cartaDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
     i++;
     setTimeout(typeWriter, typingSpeed);
   } else {
     cartaDiv.innerHTML = formatText(currentText);
     assinaturaDiv.style.display = 'block';
-    assinaturaDiv.classList.add('visible');
     assinaturaDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
   }
 }
