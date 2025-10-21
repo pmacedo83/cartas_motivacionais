@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta - Marca d'água no fundo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Petit+Formal+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+body {
+  font-family: 'Petit Formal Script', cursive;
+  background-color: #e6e6e6;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Marca d'água fixa na página inteira */
+.page-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.20; /* mais forte */
+  pointer-events: none;
+  max-width: 40%;
+  z-index: 0;
+}
+
+/* Carta container */
+.paper {
+  background-color: rgba(255, 255, 255, 0.37); /* branco */
+  border-radius: 6px;
+  max-width: 700px;
+  width: 90%;
+  padding: 2rem;
+  margin: 2rem auto;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Loader */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  font-family: 'Roboto', sans-serif;
+}
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid rgb(189, 12, 12);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+@keyframes spin { 0%,100%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+
+/* Cursor de digitação */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.4rem;
+  background-color: rgb(189, 12, 12);
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+@keyframes blink {0%,50%{opacity:1;}51%,100%{opacity:0;}}
+
+.content {
+  text-align: justify;
+  line-height: 1.2;
+  font-size: 1rem;
+}
+
+.saeb-highlight { 
+  font-family: 'Roboto', sans-serif; 
+  font-weight: 700; 
+  color: rgb(189, 12, 12 )
+}
+
+.quote-highlight { font-weight: bold; color: #2c2a2a; }
+
+/* Texto inicial fixo */
+#inicio-carta {
+  font-weight: bold;
+  font-size: 1.3rem;
+  display: block;
+}
+
+/* Assinatura */
+.assinatura {
+  text-align: right;
+  margin-top: 2rem;
+  display: none; /* oculto até terminar typing */
+}
+.assinatura .saudacao {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.assinatura .nome {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(189, 12, 12);
+  margin-bottom: 0.5rem;
+}
+.assinatura .cargo p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Marca d'água fixa no fundo -->
+<img src="logo-pilar-2.png" alt="Marca d'água" class="page-watermark">
+
+<!-- Loader -->
+<div id="loader">
+  <div class="spinner"></div>
+  <p class="text-red-600 font-bold text-lg">Carregando Mensagem...</p>
+</div>
+
+<!-- Carta -->
+<div class="paper" data-aos="fade-up">
+  <span id="inicio-carta">Estimado(a) Diretor(a)</span>
+  <div id="carta" class="content"></div>
+  <div id="assinatura" class="assinatura fade-in-element">
+    <p class="saudacao">Com apreço e consideração,</p>
+    <p class="nome">André Dias de Oliveira</p>
+    <div class="cargo mt-1">
+      <p>Chefe de Departamento</p>
+      <p>Dirigente Regional de Ensino</p>
+      <p>URE Itapeva</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 1000 });
+
+const textoCarta = `
+
+Neste período de preparação para o {SAEB}, é tempo de reconhecer o trabalho, o empenho e a dedicação de quem conduz, com sabedoria e propósito, o cotidiano da escola. O(a) diretor(a) é aquele que acredita, inspira e transforma, guiando sua equipe com coragem e sensibilidade diante dos desafios.
+
+Sob sua liderança, cada conquista se torna mais significativa e cada obstáculo, uma oportunidade de crescimento. Sua postura firme e confiante, marcada por expressões como {“Seja luz”}, {“Me tragam a solução, não o problema”}, {“Juntos somos mais fortes”}, {“Foco no resultado”}, {“A persistência leva ao sucesso”}, {“A educação é a base do conhecimento. A interpretação é a base da sabedoria”}, {“Você é mais forte do que imagina”}, {“Transformo desafios em pontes e sonhos em planos — é assim que se constrói uma escola viva”} e {“Quando trabalhamos juntos — escola, estudantes e famílias — o resultado é maior”}, revela uma visão de gestão que une compromisso, clareza e amor pela educação.
+
+Neste momento, mais do que resultados, celebramos o caminho percorrido, o esforço coletivo e a certeza de que o trabalho realizado com propósito gera frutos duradouros. Ser diretor(a) é, acima de tudo, acreditar no poder da transformação e valorizar os sonhos que nascem dentro da escola.
+
+Como disse Bernadete Gatti, {“Ser professor é, antes de tudo, acreditar que a educação é a base de todos os sonhos.”} E é por meio dessa crença que sua liderança inspira e renova a esperança de cada estudante, cada educador e de toda a comunidade escolar.
+
+Nosso reconhecimento e gratidão a você, que faz da educação uma missão diária e das conquistas escolares, motivos de orgulho e motivação para seguir em frente.`;
+
+const cartaDiv = document.getElementById('carta');
+const assinaturaDiv = document.getElementById('assinatura');
+const loader = document.getElementById('loader');
+
+let i = 0;
+let currentText = '';
+const typingSpeed = 35;
+
+function formatText(text){
+  text = text.replace(/{SAEB}/g,'<span class="saeb-highlight">SAEB</span>');
+  text = text.replace(/{([^}]+)}/g,'<span class="quote-highlight">$1</span>');
+  return text;
+}
+
+function typeWriter(){
+  if(i < textoCarta.length){
+    const char = textoCarta.charAt(i);
+    currentText += char === '\n' ? '<br>' : char;
+    cartaDiv.innerHTML = formatText(currentText) + '<span class="typing-cursor"></span>';
+    
+    // Scroll automático
+    cartaDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+    i++;
+    setTimeout(typeWriter, typingSpeed);
+  } else {
+    cartaDiv.innerHTML = formatText(currentText);
+    assinaturaDiv.style.display = 'block';
+    assinaturaDiv.classList.add('visible');
+    assinaturaDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+  }
+}
+
+window.addEventListener('load', ()=>{
+  loader.style.transition = 'opacity 0.5s';
+  loader.style.opacity = 0;
+  setTimeout(()=> loader.style.display='none', 500);
+  typeWriter();
+});
+</script>
+
+</body>
+</html>
