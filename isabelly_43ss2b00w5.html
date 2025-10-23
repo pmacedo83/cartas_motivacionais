@@ -7,29 +7,205 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
   <style>
-    body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-family: 'Georgia', serif; }
-    .letter-container { --accent-dark: #c026d3; --accent: #f472b6; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
-    .letter-container::before { content: ""; position: absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(to right, var(--accent-dark), var(--accent)); }
-    .typing { border-right: 2px solid var(--accent); animation: blink 0.7s step-end infinite; }
-    @keyframes blink { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
-    .animate-fadeIn { animation: fadeIn 1s ease-out; }
-    .signature { opacity: 0; transition: opacity 0.5s ease-in; } .visible { opacity: 1; }
-    .handwriting { font-family: 'Allura', cursive; font-size:1.6rem; line-height:1.6; }
-    .handwriting-signature { font-family: 'Allura', cursive; font-size:1.9rem; color: var(--accent); }
-    .letter-container h1 { color: var(--accent); }
+    body { 
+      font-family: 'Georgia', serif; 
+      overflow-x: hidden;
+      position: relative;
+    }
+    .letter-container { 
+      --accent-dark: #c026d3; 
+      --accent: #f472b6; 
+      max-width: 700px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+      position: relative; 
+      overflow: hidden; 
+      z-index: 10;
+      background-color: rgba(255, 255, 255, 0.37); /* Mais transparente */
+    }
+    .letter-container::before { 
+      content: ""; 
+      position: absolute; 
+      top:0; 
+      left:0; 
+      right:0; 
+      height:4px; 
+      background: linear-gradient(to right, var(--accent-dark), var(--accent)); 
+    }
+    .typing { 
+      position: relative;
+      display: inline;
+    }
+    .typing::after {
+      content: "|";
+      position: absolute;
+      right: -5px;
+      color: var(--accent);
+      animation: blink 0.7s step-end infinite;
+    }
+    @keyframes blink { 
+      from, to { opacity: 1; } 
+      50% { opacity: 0; } 
+    }
+    @keyframes fadeIn { 
+      from { opacity:0; transform: translateY(20px);} 
+      to { opacity:1; transform: translateY(0);} 
+    }
+    .animate-fadeIn { 
+      animation: fadeIn 1s ease-out; 
+    }
+    .signature { 
+      opacity: 0; 
+      transition: opacity 0.5s ease-in; 
+    } 
+    .visible { 
+      opacity: 1; 
+    }
+    .handwriting { 
+      font-family: 'Allura', cursive; 
+      font-size:1.6rem; 
+      line-height:1.6; 
+    }
+    .handwriting-signature { 
+      font-family: 'Allura', cursive; 
+      font-size:1.9rem; 
+      color: var(--accent); 
+    }
+    .letter-container h1 { 
+      color: var(--accent); 
+    }
+    
+    /* Fundo com imagem de jardim */
+    .garden-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('flowers.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      opacity: 0.8;
+      z-index: -1;
+    }
+    
+    /* Borboletas */
+    .butterfly {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    .butterfly-1 {
+      top: 20%;
+      left: 10%;
+      animation: fly1 25s linear infinite;
+    }
+    
+    .butterfly-2 {
+      top: 60%;
+      left: 20%;
+      animation: fly2 30s linear infinite;
+    }
+    
+    .butterfly-3 {
+      top: 40%;
+      left: 80%;
+      animation: fly3 20s linear infinite;
+    }
+    
+    .butterfly-4 {
+      top: 80%;
+      left: 70%;
+      animation: fly4 35s linear infinite;
+    }
+    
+    .butterfly-5 {
+      top: 30%;
+      left: 50%;
+      animation: fly5 28s linear infinite;
+    }
+    
+    @keyframes fly1 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(200px, 150px) rotate(90deg); }
+      50% { transform: translate(400px, 0) rotate(180deg); }
+      75% { transform: translate(200px, -150px) rotate(270deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+    
+    @keyframes fly2 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-150px, 200px) rotate(-90deg); }
+      50% { transform: translate(-300px, 0) rotate(-180deg); }
+      75% { transform: translate(-150px, -200px) rotate(-270deg); }
+      100% { transform: translate(0, 0) rotate(-360deg); }
+    }
+    
+    @keyframes fly3 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(0, 200px) rotate(45deg); }
+      50% { transform: translate(-200px, 0) rotate(90deg); }
+      75% { transform: translate(0, -200px) rotate(135deg); }
+      100% { transform: translate(0, 0) rotate(180deg); }
+    }
+    
+    @keyframes fly4 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(150px, -100px) rotate(-45deg); }
+      50% { transform: translate(300px, 0) rotate(-90deg); }
+      75% { transform: translate(150px, 100px) rotate(-135deg); }
+      100% { transform: translate(0, 0) rotate(-180deg); }
+    }
+    
+    @keyframes fly5 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-100px, 150px) rotate(60deg); }
+      50% { transform: translate(100px, 200px) rotate(120deg); }
+      75% { transform: translate(200px, 50px) rotate(180deg); }
+      100% { transform: translate(0, 0) rotate(240deg); }
+    }
+    
+    /* Animação de bater asas */
+    @keyframes flap {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.8); }
+    }
+    
+    .butterfly::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url("borb.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: flap 0.5s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4 md:p-8">
-  <div class="letter-container bg-white rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
+  <!-- Fundo do jardim com imagem -->
+  <div class="garden-bg"></div>
+  
+  <!-- Borboletas -->
+  <div class="butterfly butterfly-1"></div>
+  <div class="butterfly butterfly-2"></div>
+  <div class="butterfly butterfly-3"></div>
+  <div class="butterfly butterfly-4"></div>
+  <div class="butterfly butterfly-5"></div>
+
+  <!-- Carta -->
+  <div class="letter-container rounded-lg p-6 md:p-8 space-y-6 animate-fadeIn">
     <div class="text-center mb-4"><h1 class="text-2xl md:text-3xl font-bold text-blue-800">Para minha "Lerdinha" preferida!</h1></div>
     <div id="carta" class="handwriting text-gray-800 leading-relaxed whitespace-pre-line mt-6 min-h-[300px] p-4"></div>
     <div id="assinatura" class="signature text-right mt-8 pt-4 border-t border-gray-300"><p class="font-semibold text-gray-700">Com estima e consideração,</p><p class="handwriting-signature text-blue-800 mt-2">Professor Pedro Macedo</p></div>
   </div>
 
   <script>
-  const textoCarta = `Oi Isabelly!,
-
+  const textoCarta = `Oi Isabelly,
 Escrevo esta carta porque, neste final de ciclo, quero te lembrar de algo fundamental: o quanto o seu jeito faz diferença, e o quanto o mundo precisa de mais pessoas como você, e o quanto você é especial!
 
 Você tem uma presença que, quase sem esforço, transmite uma paz e uma leveza incríveis. É como se a calma a acompanhasse. Sua simplicidade e doçura têm o poder genuíno de transformar qualquer ambiente, tornando o nosso dia a dia mais agradável e fazendo com que todos ao seu redor se sintam imediatamente bem, acolhidos e seguros. Essa capacidade de suavizar os espaços é um dom que você deve valorizar imensamente.
@@ -44,19 +220,51 @@ Continue caminhando com a paciência e a fé que te são tão características, 
 
 Foi uma honra fazer parte, mesmo que por pouco tempo, da sua história.
 
-Com todo o meu carinho, a mais profunda admiração e os melhores votos para a sua vida,`;
+Com todo o meu carinho, a mais profunda admiração e os melhores votos para a sua vida`;
 
     const cartaDiv = document.getElementById('carta');
     const assinaturaDiv = document.getElementById('assinatura');
     let i = 0; let isPlaying = false; let typingInterval; const typingSpeed = 40; let currentText = '';
-    cartaDiv.innerHTML = ''; cartaDiv.classList.add('typing');
-    function typeWriter() { if (i < textoCarta.length && isPlaying) { const char = textoCarta.charAt(i); currentText += char === '\n' ? '<br>' : char; cartaDiv.innerHTML = currentText; i++; typingInterval = setTimeout(typeWriter, typingSpeed); } else if (i >= textoCarta.length) { cartaDiv.classList.remove('typing'); isPlaying = false; setTimeout(() => { assinaturaDiv.classList.add('visible'); }, 500); } }
-    function startTyping() { if (i >= textoCarta.length) restartTyping(); isPlaying = true; typeWriter(); }
-    function restartTyping() { isPlaying = false; clearTimeout(typingInterval); i = 0; currentText = ''; cartaDiv.innerHTML = ''; cartaDiv.classList.add('typing'); assinaturaDiv.classList.remove('visible'); }
+    
+    cartaDiv.innerHTML = '';
+    
+    function typeWriter() { 
+      if (i < textoCarta.length && isPlaying) { 
+        const char = textoCarta.charAt(i); 
+        currentText += char === '\n' ? '<br>' : char; 
+        cartaDiv.innerHTML = currentText + '<span class="typing"></span>';
+        
+        // Scroll automático para acompanhar o cursor
+        cartaDiv.scrollTop = cartaDiv.scrollHeight;
+        
+        i++; 
+        typingInterval = setTimeout(typeWriter, typingSpeed); 
+      } else if (i >= textoCarta.length) { 
+        isPlaying = false; 
+        // Remove o cursor quando terminar
+        cartaDiv.innerHTML = currentText;
+        setTimeout(() => { 
+          assinaturaDiv.classList.add('visible'); 
+        }, 500); 
+      } 
+    }
+    
+    function startTyping() { 
+      if (i >= textoCarta.length) restartTyping(); 
+      isPlaying = true; 
+      typeWriter(); 
+    }
+    
+    function restartTyping() { 
+      isPlaying = false; 
+      clearTimeout(typingInterval); 
+      i = 0; 
+      currentText = ''; 
+      cartaDiv.innerHTML = ''; 
+      assinaturaDiv.classList.remove('visible'); 
+    }
+    
     setTimeout(() => { startTyping(); }, 1000);
   </script>
 </body>
 </html>
-
-
-
